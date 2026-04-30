@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+char input[50];
+int i = 0;
+
+void E(), T(), F();
+
+void E() {
+    T();
+    while (input[i] == '+') {
+        i++;
+        T();
+    }
+}
+
+void T() {
+    F();
+    while (input[i] == '*') {
+        i++;
+        F();
+    }
+}
+
+void F() {
+    if (input[i] == '(') {
+        i++;
+        E();
+        if (input[i] == ')')
+            i++;
+        else {
+            printf("Rejected\n");
+            exit(0);
+        }
+    }
+    else if (input[i] >= 'a' && input[i] <= 'z') {
+        i++; 
+    }
+    else {
+        printf("Rejected\n");
+        exit(0);
+    }
+}
+
+int main() {
+    printf("Enter string: ");
+    scanf("%s", input);
+
+    E();
+
+    if (input[i] == '\0')
+        printf("String Accepted\n");
+    else
+        printf("String Rejected\n");
+
+    return 0;
+}
