@@ -1,0 +1,27 @@
+%{
+#include <stdio.h>
+
+int spaces = 0;
+int newlines = 0;
+%}
+
+%option noyywrap
+
+%%
+
+" "     { spaces++; }
+\n      { newlines++; }
+.       { }
+
+%%
+
+int main() {
+    printf("Enter text (Ctrl+Z then Enter to stop on Windows):\n");
+    yylex();
+
+    printf("\nResult:\n");
+    printf("Spaces = %d\n", spaces);
+    printf("Newlines = %d\n", newlines);
+
+    return 0;
+}
