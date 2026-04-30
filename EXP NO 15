@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <ctype.h>
+
+int main() {
+    FILE *fp;
+    char ch, fname[20];
+    int chars = 0, words = 0, lines = 0, inWord = 0;
+
+    printf("Enter file name: ");
+    scanf("%s", fname);
+
+    fp = fopen(fname, "r");
+
+    if (fp == NULL) {
+        printf("File not found\n");
+        return 0;
+    }
+
+    while ((ch = fgetc(fp)) != EOF) {
+        chars++;
+
+        if (ch == '\n')
+            lines++;
+
+        if (isspace(ch)) {
+            inWord = 0;
+        } else if (inWord == 0) {
+            inWord = 1;
+            words++;
+        }
+    }
+
+    if (chars > 0)
+        lines++;
+
+    printf("Characters = %d\n", chars);
+    printf("Words = %d\n", words);
+    printf("Lines = %d\n", lines);
+
+    fclose(fp);
+    return 0;
+}
