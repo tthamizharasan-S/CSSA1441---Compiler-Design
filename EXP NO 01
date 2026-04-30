@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <ctype.h>
+
+int main() {
+    char code[] = "p = 25 + q;\nr = p + 10;";   
+    int i = 0;
+
+    while (code[i] != '\0') {
+        if (code[i] == ' ' || code[i] == '\n' || code[i] == '\t') {
+            i++;
+        }
+        else if (code[i] == '/' && code[i+1] == '/') {
+            while (code[i] != '\0' && code[i] != '\n')
+                i++;
+        }
+        else if (isalpha(code[i]) || code[i] == '_') {
+            printf("Identifier : ");
+            while (isalnum(code[i]) || code[i] == '_') {
+                printf("%c", code[i]);
+                i++;
+            }
+            printf("\n");
+        }
+        else if (isdigit(code[i])) {
+            printf("Constant   : ");
+            while (isdigit(code[i])) {
+                printf("%c", code[i]);
+                i++;
+            }
+            printf("\n");
+        }
+        else if (code[i] == '+' || code[i] == '-' || code[i] == '*' ||
+                 code[i] == '/' || code[i] == '=') {
+            printf("Operator   : %c\n", code[i]);
+            i++;
+        }
+        else {
+            i++;
+        }
+    }
+
+    return 0;
+}
