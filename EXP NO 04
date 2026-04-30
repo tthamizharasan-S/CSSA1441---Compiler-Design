@@ -1,0 +1,20 @@
+%{
+#include <stdio.h>
+%}
+
+%%
+"+"|"-"|"*"|"/"    { printf("Valid arithmetic operator: %s\n", yytext); }
+.                  { printf("Invalid operator\n"); }
+%%
+
+int yywrap()
+{
+    return 1;
+}
+
+int main()
+{
+    printf("Enter an operator: ");
+    yylex();
+    return 0;
+}
