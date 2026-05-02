@@ -1,0 +1,42 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+FILE *yyin;
+%}
+
+TAG    \<[^>]+\>
+
+%%
+
+{TAG}     { printf("HTML Tag: %s\n", yytext); }
+
+[ \t\n]+  ;   /* ignore whitespace */
+.         ;   /* ignore other text */
+
+%%
+
+int main()
+{
+    char filename[100];
+
+    printf("Enter HTML file name: ");
+    scanf("%s", filename);
+
+    yyin = fopen(filename, "r");
+    if (!yyin)
+    {
+        printf("Error: Cannot open file %s\n", filename);
+        return 1;
+    }
+
+    yylex();
+
+    fclose(yyin);
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
