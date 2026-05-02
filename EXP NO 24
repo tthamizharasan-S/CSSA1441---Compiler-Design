@@ -1,0 +1,67 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+FILE *yyin, *yyout;
+int comment_lines = 0;
+%}
+
+%x COMMENT
+
+%%
+
+"//".*            { comment_lines++; }   /* single-line comment */
+
+"/*"              { BEGIN(COMMENT); }    /* start comment */
+
+<COMMENT>[^*\n]*  ;                      /* ignore content */
+
+<COMMENT>"*"+[^*/\n]* ;                  /* ignore */
+
+<COMMENT>\n       { comment_lines++; }   /* count lines */
+
+<COMMENT>"*/"     { BEGIN(INITIAL); }    /* end comment */
+
+\n                { fprintf(yyout, "\n"); }
+
+.                 { fprintf(yyout, "%s", yytext); }
+
+%%
+
+int main()
+{
+    char in[100], out[100];
+
+    printf("Enter input file: ");
+    scanf("%s", in);
+
+    printf("Enter output file: ");
+    scanf("%s", out);
+
+    yyin = fopen(in, "r");
+    if (!yyin)
+    {
+        printf("Cannot open input file\n");
+        return 1;
+    }
+
+    yyout = fopen(out, "w");
+    if (!yyout)
+    {
+        printf("Cannot open output file\n");
+        return 1;
+    }
+
+    yylex();
+
+    printf("\nTotal comment lines: %d\n", comment_lines);
+
+    fclose(yyin);
+    fclose(yyout);
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
