@@ -1,0 +1,38 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+FILE *yyin;
+int line = 1;
+%}
+
+%%
+
+^.*\n   { printf("%4d  %s", line++, yytext); }  /* print line with number */
+
+%%
+
+int main()
+{
+    char filename[100];
+
+    printf("Enter C file name: ");
+    scanf("%s", filename);
+
+    yyin = fopen(filename, "r");
+    if (!yyin)
+    {
+        printf("Cannot open file %s\n", filename);
+        return 1;
+    }
+
+    yylex();
+
+    fclose(yyin);
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
