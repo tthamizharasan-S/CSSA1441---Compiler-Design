@@ -1,0 +1,36 @@
+%{
+#include <stdio.h>
+%}
+
+DIGIT      [0-9]
+INT        {DIGIT}+
+FLOAT      {DIGIT}+"."{DIGIT}+
+STRING     \"([^\"\n]*)\"
+
+%%
+
+{FLOAT}    { printf("Float Constant: %s\n", yytext); }
+{INT}      { printf("Integer Constant: %s\n", yytext); }
+{STRING}   { printf("String Constant: %s\n", yytext); }
+
+.|\n       ;   /* Ignore other characters */
+
+%%
+
+int main()
+{
+    yyin = fopen("sample.c", "r");
+    if (!yyin)
+    {
+        printf("Cannot open file\n");
+        return 1;
+    }
+    yylex();
+    fclose(yyin);
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
