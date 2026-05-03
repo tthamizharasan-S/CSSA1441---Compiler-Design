@@ -1,0 +1,38 @@
+%{
+#include <stdio.h>
+#include <string.h>
+%}
+
+%%
+.*\n {
+    int d, m, y;
+
+    /* Remove newline */
+    yytext[strcspn(yytext, "\n")] = 0;
+
+    /* Try to read DOB */
+    if (sscanf(yytext, "%d/%d/%d", &d, &m, &y) == 3)
+    {
+        if (d >= 1 && d <= 31 && m >= 1 && m <= 12 && y >= 1900 && y <= 2025)
+            printf("Valid DOB: %s\n", yytext);
+        else
+            printf("Invalid DOB: %s\n", yytext);
+    }
+    else
+    {
+        printf("Invalid DOB: %s\n", yytext);
+    }
+}
+%%
+
+int main()
+{
+    printf("Enter DOB (DD/MM/YYYY):\n");
+    yylex();
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
