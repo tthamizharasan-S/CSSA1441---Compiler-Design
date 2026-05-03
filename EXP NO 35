@@ -1,0 +1,21 @@
+%{
+#include <stdio.h>
+%}
+
+%%
+[0-9]      { printf("It is a digit: %s\n", yytext); }
+.          { printf("Not a digit: %s\n", yytext); }
+\n         { return 0; }
+%%
+
+int main()
+{
+    printf("Enter a character: ");
+    yylex();
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
