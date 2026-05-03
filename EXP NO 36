@@ -1,0 +1,46 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+int a, b;
+%}
+
+%%
+[0-9]+[ \t]*\+[ \t]*[0-9]+ {
+    sscanf(yytext, "%d+%d", &a, &b);
+    printf("Addition = %d\n", a + b);
+}
+
+[0-9]+[ \t]*-[ \t]*[0-9]+ {
+    sscanf(yytext, "%d-%d", &a, &b);
+    printf("Subtraction = %d\n", a - b);
+}
+
+[0-9]+[ \t]*\*[ \t]*[0-9]+ {
+    sscanf(yytext, "%d*%d", &a, &b);
+    printf("Multiplication = %d\n", a * b);
+}
+
+[0-9]+[ \t]*\/[ \t]*[0-9]+ {
+    sscanf(yytext, "%d/%d", &a, &b);
+    if(b == 0)
+        printf("Error: Division by zero\n");
+    else
+        printf("Division = %d\n", a / b);
+}
+
+\n { return 0; }
+
+. { printf("Invalid Expression\n"); }
+%%
+
+int main()
+{
+    printf("Enter expression (e.g., 5+3): ");
+    yylex();
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
