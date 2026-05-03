@@ -1,0 +1,62 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+FILE *yyin;
+%}
+
+/* Definitions */
+KEYWORD    int|float|char|void|return
+HEADER     \#include\<[a-zA-Z0-9\.]+\.h\>
+IDENTIFIER [a-zA-Z_][a-zA-Z0-9_]*
+NUMBER     [0-9]+
+STRING     \"([^\"\n]*)\"
+OPERATOR   [+\-*/=]
+SEPARATOR  [(),;{}]
+
+%%
+
+{HEADER}     { printf("HEADER FILE: %s\n", yytext); }
+
+{KEYWORD}    { printf("KEYWORD: %s\n", yytext); }
+
+{IDENTIFIER} { printf("IDENTIFIER: %s\n", yytext); }
+
+{NUMBER}     { printf("NUMBER: %s\n", yytext); }
+
+{STRING}     { printf("STRING: %s\n", yytext); }
+
+{OPERATOR}   { printf("OPERATOR: %s\n", yytext); }
+
+{SEPARATOR}  { printf("SEPARATOR: %s\n", yytext); }
+
+[ \t\n]+     ;   /* ignore whitespace */
+
+.            { printf("UNKNOWN: %s\n", yytext); }
+
+%%
+
+int main()
+{
+    char filename[100];
+
+    printf("Enter C file name: ");
+    scanf("%s", filename);
+
+    yyin = fopen(filename, "r");
+    if (!yyin)
+    {
+        printf("Cannot open file %s\n", filename);
+        return 1;
+    }
+
+    yylex();
+
+    fclose(yyin);
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
