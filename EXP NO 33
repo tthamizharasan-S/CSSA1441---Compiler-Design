@@ -1,0 +1,31 @@
+%{
+#include <stdio.h>
+#include <string.h>
+%}
+
+%%
+.*\n {
+    if (strncmp(yytext, "http://", 7) == 0 ||
+        strncmp(yytext, "https://", 8) == 0 ||
+        strncmp(yytext, "ftp://", 6) == 0)
+    {
+        printf("Valid URL: %s", yytext);
+    }
+    else
+    {
+        printf("Invalid URL: %s", yytext);
+    }
+}
+%%
+
+int main()
+{
+    printf("Enter URLs (Ctrl+Z to stop):\n");
+    yylex();
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
